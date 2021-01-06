@@ -17,7 +17,6 @@
 #
 # =============================================================================
 
-import math
 import numpy
 import scipy.interpolate
 import scipy.optimize
@@ -150,70 +149,3 @@ class Assay(object):
 		self.pack['mean'] = numpy.sum(self.pack['lCvec']*self.pack['pdf'])
 		self.pack['mean'] /= self.pack['pdf'].sum()
 		return self.pack
-
-	def plot_ppld(self,ax):
-		xlab = r'$\log_{10}(\mathrm{specific\ infection, \mathrm{SIN/mL}})$'
-		if self.isempty or self.isfull:
-			ax.plot(self.pack['lCvec'],self.pack['pdf'],'k-')
-			ax.fill_between(self.pack['lCvec'],self.pack['pdf'],color=(0.5,0.5,0.5))
-			ax.set_title(r'Limit of detection')
-			ax.set_xlabel(xlab)
-			ax.set_ylabel(r'Un-normalizable likelihood')
-			return True
-		# Truncate the plot's range and dist to 1e-3 its max
-		pmax = 10.**(round(numpy.log10(self.pack['pdf'].max())-0.5))
-		bound = self.pack['bounds']
-		# Outer dist
-		oidx = (self.pack['pdf'] > self.pack['pdf'].max()/1.0e3)
-		ax.fill_between(self.pack['lCvec'][oidx],self.pack['pdf'][oidx]/pmax,color=(0.5,0.5,0.5))
-		# 95% CR dist
-		idx = (bound[2] < self.pack['lCvec']) * (self.pack['lCvec'] < bound[3])
-		ax.fill_between(self.pack['lCvec'][idx],self.pack['pdf'][idx]/pmax,color=(0.75,0.75,0.75))
-		# 68% CR dist
-		idx = (bound[0] < self.pack['lCvec']) * (self.pack['lCvec'] < bound[1])
-		ax.fill_between(self.pack['lCvec'][idx],self.pack['pdf'][idx]/pmax,color='white')
-		# The PDF outline
-		ax.plot(self.pack['lCvec'][oidx],self.pack['pdf'][oidx]/pmax,'k-')
-		# Indicated mode
-		ax.axvline(self.pack['mode'], color='tab:blue')
-		xlim = ax.get_xlim()
-		cor = numpy.log10(numpy.exp(-0.5772156649)) # from Wulff
-		ax.axvline(self.pack['RM']+cor,color='tab:orange',linewidth=1.5,linestyle='-')
-		ax.axvline(self.pack['SK']+cor,color='tab:green',linewidth=1.5,linestyle='--')
-		# Now annotate
-		val = tuple([self.pack['mode']]+[a-self.pack['mode'] for a in bound])
-		ax.set_title(r'${%.3f\,}_{%+.2f}^{%+.2f}\left[{}_{%+.2f}^{%+.2f}\right]$'%val)
-		ax.set_xlabel(xlab)
-		ax.set_ylabel(r'$\propto$ Likelihood\ $(\times10^{%g})$'% numpy.log10(pmax))
-		ax.set_xlim(xlim)
-
-	def plot_DRassay(self,ax):
-		# Compute theoretical DR curve
-		diff = numpy.log10(self.pack['dilfac'])/2.0
-		DR = [numpy.linspace(self.pack['dilutions'][-1]+diff,self.pack['dilutions'][0]-diff,200)]
-		pb = numpy.exp(-10.**DR[0]*self.pack['Vinoc'])
-		nmax = max(self.pack['ntot'])
-		# Theoretical line
-		for val in [self.pack['mode']]+self.pack['bounds']:
-			DR.append( nmax*(1.-pb**(10.**val)) )
-		DR = numpy.vstack(DR)
-		# Vertical line showing TCID50 by others
-		cor = numpy.log10(self.pack['Vinoc']) # as fct of well dilution, not /mL
-		ax.axvline(self.pack['RM']+cor,color='tab:orange',linewidth=1.5,linestyle='-')
-		ax.axvline(self.pack['SK']+cor,color='tab:green',linewidth=1.5,linestyle='--')
-		# Plot theoretical curve based on mode of the Cvir distribution
-		ax.fill_between(-DR[0],DR[4],DR[5],color=(0.75,0.75,0.75))
-		ax.fill_between(-DR[0],DR[2],DR[3],color='white')
-		ax.plot(-DR[0],DR[1],'tab:blue',linewidth=1.5)
-		# Plot # wells infected vs dilution
-		ax.axhline(self.pack['ntot'].max()*0.5,ls=':',color='grey')
-		ax.plot(-self.pack['dilutions'],self.pack['ninf'],'ko')
-		# Now annotate
-		ax.set_xticks(numpy.round(-self.pack['dilutions'][::2],1))
-		ax.set_xticklabels(['%.1f'%s for s in ax.get_xticks()])
-		ax.set_yticks(range(0,max(self.pack['ntot'])+1))
-		ax.set_xlim(-DR[0][-1],-DR[0][0])
-		ax.set_ylim(-0.5,self.pack['ntot'].max()+0.5)
-		ax.set_xlabel(r'Sample dilution,\ $10^{-x}$')
-		ax.set_ylabel('Number of infected wells')
-		ax.legend(['RM','SK'],bbox_to_anchor=(0.,1.02, 1.,.102), loc=3, ncol=2, borderaxespad=0., handlelength=1.7, handletextpad=0.3, frameon=False, borderpad=0.)

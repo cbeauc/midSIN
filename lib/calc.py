@@ -57,11 +57,11 @@ def calculate(reader_file):
 	# plot results 
 	gridfig = midsin.plot.grid_plot((len(assays)+1,4))
 	pid = -1;
-	for assay,label in zip(assays,labels):
+	for idassay,label in zip(assays,labels):
 		pid += 1; ax = gridfig.subaxes(pid); 
-		assay.plot_ppld(ax)
+		midsin.plot.lC_post(idassay, ax)
 		ax.text(0.03,0.95,label,va='top',ha='left',transform=ax.transAxes) 
 		pid += 1; ax = gridfig.subaxes(pid)
-		assay.plot_DRassay(ax)
+		midsin.plot.observed_wells(idassay, ax)
 
 	return gridfig, writer_file
