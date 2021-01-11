@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (C) 2020 Catherine Beauchemin
+# Copyright (C) 2020-2021 Catherine Beauchemin
 # Copyright (C) 2019-2020 Christian Quirouette
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 # =============================================================================
 
 import argparse
-import midsin.calc
+import midsin.utils
 
 parser = argparse.ArgumentParser(description="Produce output pdf and csv file of midsin")
 parser.add_argument('infile', type=str,
@@ -28,7 +28,7 @@ parser.add_argument('infile', type=str,
 #	help='graph label (default: row-#')
 args = parser.parse_args()
 
-gridfig, writer_file = midsin.calc.calculate(open(args.infile))
+gridfig, writer_file = midsin.utils.csv_to_outputs(open(args.infile))
 
 outbase = args.infile.replace('.csv','')+'-out'
 

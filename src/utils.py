@@ -22,7 +22,7 @@ import midsin
 import midsin.plot
 import io
 
-def calculate(reader_file):
+def csv_to_output(reader_file):
 
 	# create file to write output csv file data
 	writer_file = io.StringIO()
