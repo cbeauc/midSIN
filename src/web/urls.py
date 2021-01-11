@@ -22,5 +22,4 @@ urlpatterns = [
     path('', midsin.web.views.index, name="index"),
     path('oneplate', midsin.web.views.oneplate, name="oneplate"),
     path('batch', midsin.web.views.batch, name="batch"),
-    path('test', midsin.web.views.test, name="test"),
 ]
