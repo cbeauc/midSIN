@@ -29,9 +29,11 @@ setup(
 	package_data = {"": ["LICENSE"]},
 	packages = [
 		'midsin',
+		'midsin.web',
 	],
 	scripts = [
 		'bin/midsin',
+		'bin/midsin_web',
 	],
 	package_dir = {'midsin':'src'}
 )

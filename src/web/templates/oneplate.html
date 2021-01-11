@@ -1,0 +1,77 @@
+{% extends 'templates/header.html' %}
+
+{% block nav-oneplate %}<a class="active" href="{% url 'oneplate' %}">One plate</a>{% endblock %}
+
+{% block content %}
+
+<br>
+
+{% if status == "set_layout" %}
+
+<form action="" method="get">
+
+<table>
+{% for field in form %}
+	{% if field.field.required %}
+	<tr><td>
+	{{ field.label }}</td><td>{{ field }}</td><td>{{ field.help_text }}
+	</td></tr>
+	{% endif %}
+{% endfor %}
+</table>
+
+<input type="submit" value="Create plate layout">
+</form>
+
+{% elif status == "set_outcome" %}
+
+<form action="" method="get">
+
+<table>
+{% for field in form %}
+	{% if forloop.counter < 6 %}
+	<tr><td>
+	{{ field.label }}</td><td>{{ field }}</td><td>{{ field.help_text }}
+	</td></tr>
+	{% endif %}
+{% endfor %}
+</table>
+<p>
+Bookmark this page to save the <u>above</u> plate layout settings.<br>
+</p>
+<hr>
+<p>
+Process multiple plate outcomes by changing the data <u>below</u>.
+</p>
+<p>
+dils = {{ dils }}<br>
+<table>
+{% for field in form %}
+	{% if forloop.counter > 5 %}
+	<tr><td>
+	{{ field.label }}</td><td>{{ field }}</td><td>{{ field.help_text }}
+	</td></tr>
+	{% endif %}
+{% endfor %}
+</table>
+<br>
+Note: # wells infected or total can be [tab] or [comma] or [space] separated (you can paste a row or column from Excel).<br><br>
+
+<input type="submit" value="Submit plate outcome">
+</form>
+
+{% elif status == "results" %}
+
+Your settings were:<br>
+
+{% for key,val in params.items %}
+	&nbsp; {{ key }} = {{ val }}<br>
+{% endfor %}
+
+{% else %}
+
+You shouldn't be here. Something went wrong. Try again!
+
+{% endif %}
+
+{% endblock %}

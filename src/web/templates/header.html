@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>midSIN - measures virus sample infectious dose in SIN</title>
+		<link rel="stylesheet" href="{% static 'styles.css' %}">
+	</head>
+	<body>
+		{% include 'static/midsin-logo.svg' %}<br>
+		<div class="topnav">
+		{% block nav-home %}<a href="{% url 'index' %}">Home</a>{% endblock %}
+		{% block nav-oneplate %}<a href="{% url 'oneplate' %}">One plate</a>{% endblock %}
+		{% block nav-batch %}<a href="{% url 'batch' %}">A batch</a>{% endblock %}
+		</div>
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>

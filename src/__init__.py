@@ -23,6 +23,30 @@ import scipy.optimize
 import scipy.stats
 
 
+# label/header for each assay parameter
+label = {}
+# help_text associated with each assay parameter
+info = {}
+label['Vinoc'] = "Well volume (in mL)"
+info['Vinoc']  = "Typical value for 96-well plate is 0.1 mL."
+label['dilmin'] = "Starting dilution"
+info['dilmin'] = "Must be &le; 1 (e.g. 1/10, 0.01, 1e-3)."
+label['dilfac'] = "Dilution factor"
+info['dilfac'] = "Must be &lt; 1 (e.g. 1/10, 0.01, 1e-3)."
+label['ndils'] = "# dilutions"
+info['ndils'] = "Typically 7 or 8 or 11 or 12."
+label['nreps'] = "# repeats/dilution"
+info['nreps'] = "Typically 4 or 6 or 8."
+label['name'] = "Plate outcome label"
+info['name'] = "An identifying label like StrainA-24h-exp1"
+label['ninf'] = "# wells infected"
+info['ninf'] = "A list separated by [,] [.] or [tab]."
+label['ntot'] = "# wells total"
+info['ntot'] = "A list separated by [,] [.] or [tab]."
+label['comments'] = "Comment (optional)"
+info['comments'] = "Can be anything you want (e.g. 24h)."
+
+
 
 def RMSK(dilut,Npos,Ntot):
 	# if only one well

@@ -1,0 +1,19 @@
+{% extends 'templates/header.html' %}
+
+{% block nav-home %}<a class="active" href="{% url 'index' %}">Home</a>{% endblock %}
+
+{% block content %}
+
+<p>
+midSIN <b>m</b>easures the <b>i</b>nfectious <b>d</b>ose in <b>SIN</b>. It is a free online calculator to measure the number of infections that a virus sample will cause, expressed in units of <b>S</b>pecific <b>IN</b>fections (SIN) based on the results of an endpoint dilution (TCID<sub>50</sub>) assay.
+</p>
+
+<h1> Intro </h1>
+
+<p>
+Consider an example TCID<sub>50</sub> 96-well plate with with 8 repeats per dilutions, 11 different dilutions (D<sub>1</sub> to D<sub>11</sub>), and one column used for the virus-free control.
+</p>
+
+{% include 'static/example-plate.svg' %}<br>
+
+{% endblock %}
