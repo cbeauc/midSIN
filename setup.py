@@ -33,5 +33,5 @@ setup(
 	scripts = [
 		'bin/midsin',
 	],
-	package_dir = {'midsin':'lib'}
+	package_dir = {'midsin':'src'}
 )
