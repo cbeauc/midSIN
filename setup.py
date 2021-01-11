@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Catherine Beauchemin
+# Copyright (C) 2020-2021 Catherine Beauchemin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,16 +15,16 @@
 #
 ###############################################################################
 
-import setuptools
+from distutils.core import setup
 
-setuptools.setup(
+setup(
 	name = 'midsin',
 	version = '0.1',
 	author = 'Catherine Beauchemin et al (See AUTHORS)',
 	author_email = 'cbeau@users.sourceforge.net',
 	url = 'https://github.com/cbeauc/midsin',
 	license = 'See LICENSE file',
-	description = 'Calculator of the specific infection (SIN) concentration of a virus sample based on an endpoint dilution (TCID50) assay.',
+	description = 'Measures the specific infection (SIN) concentration of a virus sample based on an endpoint dilution (TCID50) assay.',
 	long_description = open("README.rst").read(),
 	package_data = {"": ["LICENSE"]},
 	packages = [

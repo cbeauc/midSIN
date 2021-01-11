@@ -47,11 +47,10 @@ def calculate(reader_file):
 		assert len(ntot)==len(ninf)
 		labels.append( line[0] )
 		assays.append( midsin.Assay(Vinoc, dilmin, dilfac, ninf, ntot=ntot) )
-		pack = assays[-1].payload()
 
 		# write results to file for output csv file
-		line += [ pack['mode'] ] + pack['bounds']
-		line += [ pack['RM'] , pack['SK'] ]
+		line += [ assays[-1].pack['mode'] ] + assays[-1].pack['bounds']
+		line += [ assays[-1].pack['RM'] , assays[-1].pack['SK'] ]
 		writer.writerow(line)
 
 	# plot results 

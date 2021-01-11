@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Catherine Beauchemin
+# Copyright (C) 2020-2021 Catherine Beauchemin
 # Copyright (C) 2019-2020 Christian Quirouette
 # Copyright (C) 2016-2019 Daniel Cresta
 #
@@ -21,6 +21,7 @@ import numpy
 import scipy.interpolate
 import scipy.optimize
 import scipy.stats
+
 
 
 def RMSK(dilut,Npos,Ntot):
@@ -72,6 +73,8 @@ class Assay(object):
 			self.isfull = False
 		# Compute arg of lnqbase = exp[ - Vinoc * dilmin * dilfac^pow ]
 		self.VDs = Vinoc * dilmin * dilfac**numpy.arange(len(self.nmks))
+		# Compute the remainder of the assay payload
+		self.payload()
 
 	def lCmode(self):
 		""" Computes the mode of the posterior PDF for lCvir, and the TCID50 via the Reed-Munch and Spearmann-Kaerber estimation methods. """
