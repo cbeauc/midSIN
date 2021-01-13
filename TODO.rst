@@ -8,9 +8,9 @@ core calculator code
 
 command-line tool (src/*py, bin)
 ################################
+* add option to create graph as pdf, svg, png, etc.?
 
 django web interface (src/web)
 ##############################
-* Fix dilmin and dilfac info to reflect 1/10 and 1e-3 not currently allowed
 * Fix dilmin and dilfac in form to allow 1/10 and 1e-3 entries
 * Make field.help_text appear as floating pop-ups on-click or hover

@@ -22,7 +22,74 @@ import midsin
 import midsin.plot
 import io
 
-def csv_to_output(reader_file):
+
+
+def dict_to_output(pdic):
+	"""Parses input dictionary into a midsin.Assay and returns the analysis
+		a figure and csv StringIO.
+
+	Args:
+		pdic: The dictionary of input parameters.
+		header: Boolean whether or not the header line should be included.
+
+	Returns:
+		gridfig: matplotlib figure grid which can be saved via method
+			gridfig.fig.savefig.
+		writer_file: io.StingIO of the input+output written using csv.writer
+
+	"""
+	return csv_to_output(dict_to_csv(pdic))
+
+
+
+def dict_to_csv(pdic,header=True):
+	"""Parses input dictionary into a csv.writer-formatted list of lines
+		suitable for use with .dict_to_output(lines).
+
+	Args:
+		pdic: The dictionary of input parameters.
+		header: Boolean whether or not the header line should be included.
+
+	Returns:
+		lines: csv.writer-formatted list of lines.
+
+	"""
+	lines = []
+	if header:
+		lines.append(['%s'%midsin.label[key] for key in midsin.incols])
+	# Check whether pdic contains one or more realizations
+	try:
+		nres = len(pdic['Vinoc'])
+	except TypeError:
+		nres = 1
+	for n in range(nres):
+		lines.append([])
+		for key in midsin.incols:
+			if key not in ('ntot','ninf'):
+				lines[-1].append( pdic[key] )
+			else:
+				lines[-1] += list(pdic[key]) + ['#']
+	# Offset header to accommodate the ndils columns of ntot and ninf
+	for i in range(pdic['ndils']):
+		lines[0].insert(lines[0].index(midsin.label['ntot'])+1,'')
+		lines[0].insert(lines[0].index(midsin.label['ninf'])+1,'')
+	return lines
+
+
+
+def csv_to_output(csv_input_lines):
+	"""Parses a list or iterator of csv.reader parsed input lines into a
+		midsin.Assay and returns the analysis as a figure and csv StringIO.
+
+	Args:
+		csv_input_lines: csv.reader-style interator or list of lines.
+
+	Returns:
+		gridfig: matplotlib figure grid which can be saved via method
+			gridfig.fig.savefig.
+		writer_file: io.StingIO of the input+output written using csv.writer
+
+	"""
 
 	# create file to write output csv file data
 	writer_file = io.StringIO()
@@ -30,15 +97,17 @@ def csv_to_output(reader_file):
 
 	labels = []
 	assays = []
-	for line in csv.reader(reader_file, delimiter=','):
-		if ('Label' in line[0]): # edit/write header line, then skip
-			line += ['mode (rIU/mL)','68%CR-LB (rIU/mL)', '68%CR-UB (rIU/mL)', '95%CR-LB (rIU/mL)', '95%CR-UB (rIU/mL)', 'RM (TCID50/mL)', 'SK (TCID50/mL)']
+	for line in csv_input_lines:
+		# Check if this is the header line
+		if midsin.label['Vinoc'] in line:
+			line += [midsin.label[key] for key in midsin.outcols]
 			writer.writerow(line)
 			continue
-		elif ('#' in line[0]): # write/skip comment line
+		# Check if line is commented-out (using #)
+		elif line[0] == '#':
 			writer.writerow(line)
 			continue
-		# read input csv file and run data through calculator
+		# Otherwise, parse input csv file line and input data into Assay
 		Vinoc,dilmin,dilfac = (float(a) for a in line[1:1+3])
 		icut = line[4:].index('#') + 4
 		ntot = [int(a) for a in line[4:icut]]

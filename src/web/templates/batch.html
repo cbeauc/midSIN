@@ -1,0 +1,88 @@
+{% extends 'templates/header.html' %}
+
+{% block nav-batch %}<a class="active" href="{% url 'batch' %}">A batch</a>{% endblock %}
+
+{% block content %}
+
+{% if not image %}
+
+<p>
+1. Download the midSIN csv template to enter your data: <a href="{% url 'csv_template' %}">midsin_batch.csv</a>
+</p>
+<p>
+2. Upload the updated csv template with your data by clicking "Browse..." and then "Submit".
+</p>
+		{% if messages %}
+			{% for message in messages %}
+				<div>
+					<strong>{{message|safe}}</strong>
+				</div>
+			{% endfor %}
+		{% else %}
+		{{order}}
+		<form  action="" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<label for="file1">Upload a file</label>
+			<input type="file" id="file1" name="file">
+			<button class="compute" type="submit"><b>Submit to midSIN</b></button>
+		</form>
+		{% endif %}
+
+<p>
+<u>Notes</u>
+</p>
+<ul>
+	<li>You can open and edit the file in a text program (e.g. notepad, gedit) or a spreadsheet software. Tip: If using a spreadsheet software, select comma as delimiters, make sure no "" [quotes] are added to text entries.
+	</li>
+	<li>The first line of the template file contains the headers for each column. Don't modify the headers.
+	</li>
+	<li>The second line contains the example as a way to demonstrate how to fill out the template. You can re-submit the template file as is, unchanged, to see how midSIN works.
+	</li>
+	<li>You can enter as many lines as you want, one plate outcome per line, to process several plate outcomes at a time.
+	</li>
+	<li>Since different plate outcomes can have a different # of dilutions, the number of columns occupied by the # of wells total and infected can differ between lines. To indicate where the last column for # of wells total (or infected) you need to enter # after the set, like 8,8,8,8,8,8,# where # indicates the end of the column for # of wells total.
+	</li>
+	<li>From time to time, one of your replicate at one dilution could be contaminated and needs to be discarded. In that case, indicate the true # of total wells considered, e.g. 8,8,7,8,8,8,# where the 7 appears in the dilution column where one well was contaminated.
+	</li>
+	<li>Any line starting with # will be ignored. So if you want to keep the example line in the template but you want midSIN to skip it, you should add # as the first character at the start of that line.
+	</li>
+</ul>
+
+{% else %}
+<p>
+Here are the results of midSIN's analysis:
+</p>
+<p>
+	{{ image|safe }}
+</p>
+<p>
+You can download the result files (graph as pdf, results as csv):
+</p>
+	<form action="{% url 'download_batchres' %}" method="POST">
+		{% csrf_token %}
+		<input type="hidden" value="{{ zipbuffer }}" name="zipbuffer" id="zipbuffer">
+		<button class="compute" type="submit"><b>Download (pdf+csv) zip file</b></button>
+	</form>	
+
+<p>
+The columns added to your result csv file are:
+</p>
+	<ul>
+		<li><b>mode log10(SIN/mL)</b>
+		is the mode (most likely value) of the log<sub>10</sub> SIN/mL concentration for your sample. It is the number indicated above the top-left graph.
+		</li>
+		<li><b>68%CI-lo</b> and <b>68%CI-hi log10(SIN/mL)</b>
+		are the lower (lo) and upper (hi) bounds of the 68% credible interval (CI) of the log<sub>10</sub> SIN/mL concentration for your sample. It is the number indicated as a &#177; above the top-left graph.
+		</li>
+		<li><b>95%CI-lo</b> and <b>95%CI-hi log10(SIN/mL)</b>
+		the 95% credible interval (CI). It is the number indicated as a &#177; in the square braces above the top-left graph.
+		</li>
+		<li><b>RM</b> and <b>SK log10(TCID50/mL)</b>
+		the Reed-Muench and Spearman-K&auml;rber estimate for the log<sub>10</sub> TCID<sub>50</sub>/mL for your sample.
+		</li>
+	</ul>
+
+{% endif %}
+
+
+{% endblock %}

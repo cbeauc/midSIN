@@ -1,19 +1,57 @@
-from django.shortcuts import render, get_object_or_404
+# Copyright (C) 2020-2021 Catherine Beauchemin
+# Copyright (C) 2020 Christian Quirouette
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# =============================================================================
+
+from django.shortcuts import render
 from django.http import HttpResponse
 import midsin.web.forms as sinforms
+import midsin.utils
+import io
+import csv
+import zipfile
 
 
-def index(request):
+
+def home(request):
 	if request.method == "GET":
 		return render(request, "templates/home.html")
 
 
-def parse_plate_outcome( pdic ):
+
+def csv_template(request):
+	""" Constructs the csv_template for batch processing of multiple plate
+		outcomes.
+
+	"""
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="midsin_batch.csv"'
+	writer = csv.writer(response)
+	writer.writerows(midsin.utils.dict_to_csv(midsin.example))
+	return response
+
+
+
+def parse_ninf_ntot( pdic ):
 	for key in ('ninf','ntot'):
 		pdic[key] = [int(a) for a in pdic[key].replace(',',' ').split()]
 	assert len(pdic['ninf']) == len(pdic['ntot']), "Length of ninf != ntot."
 	assert len(pdic['ninf']) == pdic['ndils'], "Length of ninf != ndils."
 	return pdic
+
 
 
 def oneplate(request):
@@ -31,40 +69,45 @@ def oneplate(request):
 			return render(request,"templates/oneplate.html",{'form':form, 'dils':dils, 'status':'set_outcome'})
 
 		# If the plate outcome has been submitted and is valid
-		data = parse_plate_outcome( form.cleaned_data.copy() )
-		# Process results
-		#assay = midsin.Assay(Vinoc, dilmin, dilfac, ninf, ntot=ntot)
-		#gridfig = midsin.plot.grid_plot(1,2)
-		#ax = gridfig.subaxes(0)
-		#midsin.plot.lC_post(idassay, ax)
-		#ax.text(0.03,0.95,label,va='top',ha='left',transform=ax.transAxes) 
-		#ax = gridfig.subaxes(0)
-		#midsin.plot.observed_wells(idassay, ax)
-		return render(request,"templates/oneplate.html",{'status':'results', 'params': data}) 
+		data = parse_ninf_ntot( form.cleaned_data.copy() )
+		gridfig,csvout = midsin.utils.dict_to_output(data)
+		# Save figure file
+		figfile = io.StringIO()
+		gridfig.fig.savefig(figfile,format='svg',bbox_inches='tight')
+		return render(request,"templates/oneplate.html",{'status':'results', 'params':data, 'image':figfile.getvalue(), 'template':csvout.getvalue()})
 
-
-def oldv2oneplate(request):
-	if request.method == "GET":
-		form = sinforms.plate_layout(request.GET)
-		# after layout, before outcome
-		if form.is_valid():
-			layout = form.cleaned_data
-			layout_text = ['%s = %g'%(form.fields[key].label,val) for key,val in layout.items()]
-			outcome_form = sinforms.plate_outcome()
-			outcome_form.add_outcome(layout)
-			return render(request, "templates/oneplate.html",{'layout_form': None, 'layout_text': layout_text, 'outcome_form': outcome_form})
-		# after layout, after outcome
-		if 'ntot0' in request.GET:
-			form = sinforms.plate_outcome(request.GET)
-			if form.is_valid():
-				print(form.layout)
-				return render(request, "templates/oneplate.html",{'layout_form': None, 'outcome_form': form})
-		# Initial (before layout)
-		form = sinforms.plate_layout()
-		return render(request, "templates/oneplate.html",{'layout_form': form})
 
 
 def batch(request):
 	if request.method == "GET":
 		return render(request, "templates/batch.html")
 
+	# POST method, i.e. user sends input csv file to server
+
+	# prepare input csv file to read
+	lines = request.FILES['file'].read().decode('UTF-8')
+	lines = csv.reader(io.StringIO(lines),delimiter=',',quotechar="|")
+	# compute results using midsin
+	gridfig, writer_file = midsin.utils.csv_to_output(lines)
+	# save graph for web display
+	figtext = io.StringIO()
+	gridfig.fig.savefig(figtext,format='svg',bbox_inches='tight')
+	# Pack-up zip of [image as pdf] + [results as csv]
+	image_file = io.BytesIO()
+	gridfig.fig.savefig(image_file,format='pdf',bbox_inches='tight')
+	zipbuffer = io.BytesIO()
+	with zipfile.ZipFile(zipbuffer,'w') as zf:
+		zf.writestr('output.pdf',image_file.getvalue())
+		zf.writestr('output.csv',writer_file.getvalue())
+	# return figfile and writerfile
+	return render(request,'templates/batch.html',{'image':figtext.getvalue(), 'writer_file':writer_file.getvalue(),'zipbuffer':zipbuffer.getvalue().hex()})
+
+
+
+def download_batchres(request):
+	# grab the file via the request
+	zipbuffer = bytes.fromhex(request.POST.get('zipbuffer'))
+	#return zip-file as attachment
+	response = HttpResponse(zipbuffer, content_type="application/x-zip-compressed")
+	response['Content-Disposition'] = 'attachment; filename=output.zip'
+	return response

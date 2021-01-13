@@ -55,18 +55,36 @@ dils = {{ dils }}<br>
 {% endfor %}
 </table>
 <br>
-Note: # wells infected or total can be [tab] or [comma] or [space] separated (you can paste a row or column from Excel).<br><br>
 
 <input type="submit" value="Submit plate outcome">
 </form>
 
 {% elif status == "results" %}
 
-Your settings were:<br>
+<p>
+Here are the results of midSIN's analysis:
+</p>
+<p>
+{{ image|safe }}
+</p>
+<p>
+<b>Left graph</b> The likelihood distribution of the SIN concentration in your sample. The log<sub>10</sub> SIN/mL concentration of your sample is indicated above the graph. The &#177; numbers are the 68% CI (CI = credible interval) and the &#177; in square brackets are the 95% CI.
+</p>
+<p>
+<b>Right graph</b> The # of infected wells (y-axis) as a function of your sample dilution (x-axis) are shown. Please use this graph to visually confirm you entered your # infected wells and dilution factor correctly. The x value where the blue curve crosses the horizontal dashed line is the log<sub>10</sub> dilution at which your sample contains 1 TCID<sub>50</sub>/mL. The RM and SK lines indicates this same quantity, but estimated by the less accurate and biased <a href="https://doi.org/10.1093/oxfordjournals.aje.a118408">Reed-Muench</a> and <a href="https://doi.org/10.1111/j.2044-8295.1908.tb00176.x">Spearman</a>-<a href="https://doi.org/10.1007%2FBF01863914">K&auml;rber</a> methods.
+</p>
+<p>
+If you would like to use midSIN to process multiple outcomes at a time, rather than one by one, do <a href="{% url 'batch' %}">A batch</a>.
+</p>
+
+
+<p>
+<u>Your settings were:</u><br>
 
 {% for key,val in params.items %}
 	&nbsp; {{ key }} = {{ val }}<br>
 {% endfor %}
+</p>
 
 {% else %}
 

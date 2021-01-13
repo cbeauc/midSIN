@@ -18,8 +18,9 @@ from django.urls import path
 import midsin.web.views
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
-    path('', midsin.web.views.index, name="index"),
+    path('', midsin.web.views.home, name="home"),
     path('oneplate', midsin.web.views.oneplate, name="oneplate"),
     path('batch', midsin.web.views.batch, name="batch"),
+    path('csv_template', midsin.web.views.csv_template, name="csv_template"),
+    path('download_batchres', midsin.web.views.download_batchres, name="download_batchres"),
 ]

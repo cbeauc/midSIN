@@ -19,6 +19,7 @@
 # =============================================================================
 
 import argparse
+import csv
 import midsin.utils
 
 parser = argparse.ArgumentParser(description="Produce output pdf and csv file of midsin")
@@ -28,7 +29,9 @@ parser.add_argument('infile', type=str,
 #	help='graph label (default: row-#')
 args = parser.parse_args()
 
-gridfig, writer_file = midsin.utils.csv_to_outputs(open(args.infile))
+with open(args.infile) as f:
+	lines = csv.reader(f,delimiter=',')
+	gridfig, writer_file = midsin.utils.csv_to_output(lines)
 
 outbase = args.infile.replace('.csv','')+'-out'
 

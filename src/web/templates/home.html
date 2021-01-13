@@ -1,19 +1,35 @@
 {% extends 'templates/header.html' %}
 
-{% block nav-home %}<a class="active" href="{% url 'index' %}">Home</a>{% endblock %}
+{% block nav-home %}<a class="active" href="{% url 'home' %}">Home</a>{% endblock %}
 
 {% block content %}
 
 <p>
-midSIN <b>m</b>easures the <b>i</b>nfectious <b>d</b>ose in <b>SIN</b>. It is a free online calculator to measure the number of infections that a virus sample will cause, expressed in units of <b>S</b>pecific <b>IN</b>fections (SIN) based on the results of an endpoint dilution (TCID<sub>50</sub>) assay.
+midSIN <b>m</b>easures the <b>i</b>nfectious <b>d</b>ose in <b>SIN</b>
 </p>
 
 <h1> Intro </h1>
-
 <p>
-Consider an example TCID<sub>50</sub> 96-well plate with with 8 repeats per dilutions, 11 different dilutions (D<sub>1</sub> to D<sub>11</sub>), and one column used for the virus-free control.
+The infection concentration of a virus sample has traditionally been quantified in units of plaque or focus forming units (PFU or FFU) or 50% tissue culture or cell culture or egg infectious dose (TCID<sub>50</sub>, CCID<sub>50</sub>, EID<sub>50</sub>).
+</p>
+<p>
+midSIN is a free, <a href="https://github.com/cbeauc/midSIN">open-source</a> tool which calculates the SIN concentration of a virus sample based on the results of performing an endpoint dilution (TCID<sub>50</sub>) assay. SIN which stands for <b>S</b>pecific <b>IN</b>fections, is meant to replace all existing units (PFU, FFU, TCID<sub>50</sub>, ...) as a more robust and accurate measure of a virus sample's infection concentration. A sample which contains 1 SIN/mL is expected to cause one infection per mL if the infection is conducted under the same conditions as the TCID<sub>50</sub> assay (same cells, incubation time, etc.). See <a href="">our paper</a> for details.
 </p>
 
-{% include 'static/example-plate.svg' %}<br>
+<h1> An example </h1>
+
+<p>
+Consider an example TCID<sub>50</sub> assay on a 96-well plate with 11 different dilutions (D<sub>1</sub> to D<sub>11</sub>), 8 repeats per dilution, and one column used for the virus-free control.
+</p>
+<p>
+{% include 'static/example-plate.svg' %}
+</p>
+<p>
+Imagine that the <b>Well volume</b> (virus sample + dilutant in each well) is 0.1 mL, the <b>Starting dilution</b> is 0.01 (100-fold), the <b>Dilution factor</b> between successive dilutions (e.g. D<sub>1</sub> to D<sub>2</sub>) is 0.1 (10-fold), and you observed the above plate outcome. In such a case, midSIN would return
+</p>
+<p>
+{% include 'static/example-results.svg' %}
+</p>
+which indicates that your sample contained 10<sup>8.983&#177;0.1</sup> SIN/mL. For more explanations about the results provided by midSIN, check out <a href="{% url 'oneplate' %}">One plate</a> where this example gets pre-loaded if you don't change any of the settings.
 
 {% endblock %}

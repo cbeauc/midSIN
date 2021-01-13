@@ -23,29 +23,59 @@ import scipy.optimize
 import scipy.stats
 
 
-# label/header for each assay parameter
-label = {}
-# help_text associated with each assay parameter
-info = {}
-label['Vinoc'] = "Well volume (in mL)"
-info['Vinoc']  = "Typical value for 96-well plate is 0.1 mL."
-label['dilmin'] = "Starting dilution"
-info['dilmin'] = "Must be &le; 1 (e.g. 1/10, 0.01, 1e-3)."
-label['dilfac'] = "Dilution factor"
-info['dilfac'] = "Must be &lt; 1 (e.g. 1/10, 0.01, 1e-3)."
-label['ndils'] = "# dilutions"
-info['ndils'] = "Typically 7 or 8 or 11 or 12."
-label['nreps'] = "# repeats/dilution"
-info['nreps'] = "Typically 4 or 6 or 8."
-label['name'] = "Plate outcome label"
-info['name'] = "An identifying label like StrainA-24h-exp1"
-label['ninf'] = "# wells infected"
-info['ninf'] = "A list separated by [,] [.] or [tab]."
-label['ntot'] = "# wells total"
-info['ntot'] = "A list separated by [,] [.] or [tab]."
-label['comments'] = "Comment (optional)"
-info['comments'] = "Can be anything you want (e.g. 24h)."
+# Columns of csv input file
+incols = ['name','Vinoc','dilmin','dilfac','ntot','ninf','comments']
 
+# Columns added to csv output file
+outcols = ['mode','68lb','68ub','95lb','95ub','RM','SK']
+
+# label/header for assay parameters
+label = {
+	# input
+	'Vinoc': "Well volume (in mL)",
+	'dilmin': "Starting dilution",
+	'dilfac': "Dilution factor",
+	'ndils': "# dilutions",
+	'nreps': "# repeats/dilution",
+	'name': "Label",
+	'ninf': "# wells infected",
+	'ntot': "# wells total",
+	'comments': "Comment (optional)",
+	# output
+	'mode': 'mode log10(SIN/mL)',
+	'68lb': '68%CI-lo log10(SIN/mL)',
+	'68ub': '68%CI-hi log10(SIN/mL)',
+	'95lb': '95%CI-lo log10(SIN/mL)',
+	'95ub': '95%CI-hi log10(SIN/mL)',
+	'RM': 'RM log10(TCID50/mL)',
+	'SK': 'SK log10(TCID50/mL)',
+}
+
+# help_text associated with assay parameters
+info = {
+	'Vinoc': "Typical value for 96-well plate is 0.1 mL.",
+	'dilmin': "Must be &le; 1 (e.g. 10-fold as 0.1, 4-fold as 0.25).",
+	'dilfac': "Must be &lt; 1 (e.g. 10-fold as 0.1, 4-fold as 0.25).",
+	'ndils': "Typically 7 or 8 or 11 or 12.",
+	'nreps': "Typically 4 or 6 or 8.",
+	'name': "An identifying label like StrainA-24h-exp1.",
+	'ninf': "A list separated by [,] [.] or [tab].",
+	'ntot': "A list separated by [,] [.] or [tab].",
+	'comments': "Can be anything you want (e.g. 24h).",
+}
+
+# parameter values for the example assay
+example = {
+	'Vinoc': 0.1,
+	'dilmin': 0.01,
+	'dilfac': 0.1,
+	'ndils': 11,
+	'nreps': 8,
+	'name': "example",
+	'ninf': [8,8,8,8,8,7,7,5,2,0,0],
+	'ntot': [8,8,8,8,8,8,8,8,8,8,8],
+	'comments': '',
+}
 
 
 def RMSK(dilut,Npos,Ntot):

@@ -10,11 +10,14 @@
 	<body>
 		{% include 'static/midsin-logo.svg' %}<br>
 		<div class="topnav">
-		{% block nav-home %}<a href="{% url 'index' %}">Home</a>{% endblock %}
+		{% block nav-home %}<a href="{% url 'home' %}">Home</a>{% endblock %}
 		{% block nav-oneplate %}<a href="{% url 'oneplate' %}">One plate</a>{% endblock %}
 		{% block nav-batch %}<a href="{% url 'batch' %}">A batch</a>{% endblock %}
 		</div>
 		{% block content %}
 		{% endblock %}
+	<br>
+	<br>
+	<footer> &copy;2021, <a href="https://orcid.org/0000-0003-0599-0069">Catherine Beauchemin</a>. </footer>
 	</body>
 </html>
