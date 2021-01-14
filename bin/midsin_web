@@ -10,19 +10,24 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'midsin.web.settings')
-    #os.environ.setdefault('MIDSIN_WEB_PATH', '${HOME}/local/share/midsin/web')
-    os.environ.setdefault('MIDSIN_WEB_PATH', '/tmp/ebichu/local/src/midsin/src/web')
-    try:
-        from django.core.management import execute_from_command_line
-    except ImportError as exc:
-        raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
-        ) from exc
-    execute_from_command_line(sys.argv)
+	try:
+		os.environ['DJANGO_SETTINGS_MODULE']
+	except KeyError:
+		os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'midsin.web.settings.devel')
+	try:
+		os.environ['MIDSIN_WEB_PATH']
+	except KeyError as e:
+		print("%s is not set" % str(e), file=sys.stderr)
+	try:
+		from django.core.management import execute_from_command_line
+	except ImportError as exc:
+		raise ImportError(
+			"Couldn't import Django. Are you sure it's installed and "
+			"available on your PYTHONPATH environment variable? Did you "
+			"forget to activate a virtual environment?"
+		) from exc
+	execute_from_command_line(sys.argv)
 
 
 if __name__ == '__main__':
-    main()
+	main()

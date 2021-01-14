@@ -30,6 +30,7 @@ setup(
 	packages = [
 		'midsin',
 		'midsin.web',
+		'midsin.web.settings',
 	],
 	scripts = [
 		'bin/midsin',

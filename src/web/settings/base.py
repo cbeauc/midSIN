@@ -18,16 +18,10 @@ print('***BASE_DIR***: ',BASE_DIR)
 print('***MIDSIN_WEB_PATH***: ',os.environ["MIDSIN_WEB_PATH"])
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'b72%b#qy9k5s$4)phka#6p$)#_=btg=b7j&ze2sjkf4lx_rkv2'
+with open(os.environ["MIDSIN_WEB_PATH"]+"/settings/secret_key.txt") as f:
+	SECRET_KEY = f.read().strip()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -56,8 +50,6 @@ ROOT_URLCONF = 'midsin.web.urls'
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		#'DIRS': [BASE_DIR],
-		#'DIRS': [os.path.join(BASE_DIR, 'web')],
 		'DIRS': [os.environ["MIDSIN_WEB_PATH"]],
 		'APP_DIRS': False,
 		'OPTIONS': {
@@ -81,7 +73,6 @@ DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
 		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-		#'NAME': os.path.join(os.environ["MIDSIN_WEB_PATH"], 'db.sqlite3'),
 	}
 }
 
@@ -118,31 +109,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ""
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
-STATIC_URL = "/static/"
-
-# Additional locations of static files
-STATICFILES_DIRS = (
-	# Put strings here, like "/home/html/static" or "C:/www/django/static".
-	# Always use forward slashes, even on Windows.
-	# Don't forget to use absolute paths, not relative paths.
-	#os.path.join(BASE_DIR, "static"),
-	os.path.join(os.environ["MIDSIN_WEB_PATH"], "static"),
-)
-#STATICFILES_DIRS = [
-#    os.path.join(BASE_DIR, "web/templates"),
-#]
 
 # List of finder classes that know how to find static files in
 # various locations.
