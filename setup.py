@@ -32,7 +32,10 @@ setup(
 		"midsin.web.settings",
 	],
 	package_dir = {"midsin":"src"},
-	package_data = {"": ["LICENSE"]},
+	package_data = {
+		"": ["LICENSE"],
+		"midsin.web": ["templates/*","static/*","settings/*"],
+	},
 	scripts = [
 		"bin/midsin",
 		"bin/midsin_web",

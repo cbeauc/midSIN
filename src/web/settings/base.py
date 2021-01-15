@@ -12,16 +12,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print('***BASE_DIR***: ',BASE_DIR)
 print('***MIDSIN_WEB_PATH***: ',os.environ["MIDSIN_WEB_PATH"])
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
 with open(os.environ["MIDSIN_WEB_PATH"]+"/settings/secret_key.txt") as f:
 	SECRET_KEY = f.read().strip()
-
 
 
 # Application definition
@@ -72,7 +68,7 @@ WSGI_APPLICATION = 'midsin.web.wsgi.application'
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		'NAME': os.path.join(os.environ["MIDSIN_WEB_PATH"], 'db.sqlite3'),
 	}
 }
 
