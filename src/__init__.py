@@ -146,15 +146,6 @@ class Assay(object):
 
 	def lCcalc(self, lCvec):
 		""" Compute posterior likelihood distribution, i.e. value of exp(lnProb), for all elements in vector lCvec, and returns it as a vector of the same size as lCvec, suitable for plotting. """
-		# OLD WAY OF COMPUTING
-		#lnP = numpy.zeros_like(lCvec)
-		# for each column...
-		#for VD,k,nmk in zip(-self.VDs,self.pack['ninf'],self.nmks):
-		#	CVD = 10.0**lCvec * VD
-		#	lnP += nmk*CVD
-		#	lnP += k*numpy.log1p(-numpy.exp(CVD))
-		#return numpy.exp(lnP)
-		# NEW WAY OF COMPUTING
 		P = numpy.ones_like(lCvec)
 		for VD,n,k in zip(-self.VDs,self.pack['ntot'],self.pack['ninf']):
 			pinfvec = -numpy.expm1(10.0**lCvec*VD)

@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Catherine Beauchemin
+# Copyright (C) 2020-2021 Catherine Beauchemin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ params = {
 matplotlib.rcParams.update(params)
 import matplotlib.figure
 from matplotlib.backends.backend_agg import FigureCanvas
+
+
 
 class grid_plot(object):
 	def __init__(self, ghgw, hspace=0.44, wspace=0.32, rwidth=3.8, rheight=3.6):
@@ -114,7 +116,9 @@ def observed_wells(idassay, ax):
 	ax.plot(-DR[0],DR[1],'tab:blue',linewidth=1.5)
 	# Plot # wells infected vs dilution
 	ax.axhline(idassay.pack['ntot'].max()*0.5,ls=':',color='grey')
-	ax.plot(-idassay.pack['dilutions'],idassay.pack['ninf'],'ko')
+	# Need to account for spoiled wells e.g. 7 rather than 8 repeats
+	ninfcorr = (1.0*idassay.pack['ninf']/idassay.pack['ntot'])*numpy.round(idassay.pack['ntot'].mean())
+	ax.plot(-idassay.pack['dilutions'],ninfcorr,'ko')
 	# Now annotate
 	ax.set_xticks(numpy.round(-idassay.pack['dilutions'][::2],1))
 	ax.set_xticklabels(['%.1f'%s for s in ax.get_xticks()])

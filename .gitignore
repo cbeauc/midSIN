@@ -1,3 +1,4 @@
 build
 dist
 src/web/settings/secret_key.txt
+src/web/settings/production.py
