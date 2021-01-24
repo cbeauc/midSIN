@@ -25,11 +25,11 @@ Consider an example TCID<sub>50</sub> assay on a 96-well plate with 11 different
 {% include 'static/example-plate.svg' %}
 </p>
 <p>
-Imagine that the <b>Well volume</b> (virus sample + dilutant in each well) is 0.1 mL, the <b>Starting dilution</b> is 0.01 (100-fold), the <b>Dilution factor</b> between successive dilutions (e.g. D<sub>1</sub> to D<sub>2</sub>) is 0.1 (10-fold), and you observed the above plate outcome. In such a case, midSIN would return
+Imagine that the <b>Well volume</b> (virus sample + dilutant in each well) is 0.1 mL, the <b>Starting dilution</b> is 0.01 (100-fold), the <b>Dilution factor</b> between successive dilutions (e.g. D<sub>1</sub> to D<sub>2</sub>) is 0.1 (10-fold), and you observed the above sample outcome. In such a case, midSIN would return
 </p>
 <p>
 {% include 'static/example-results.svg' %}
 </p>
-which indicates that your sample contained 10<sup>8.983&#177;0.1</sup> SIN/mL. For more explanations about the results provided by midSIN, check out <a href="{% url 'oneplate' %}">One plate</a> where this example gets pre-loaded if you don't change any of the settings.
+which indicates that your sample contained 10<sup>8.983&#177;0.1</sup> SIN/mL. For more explanations about the results provided by midSIN, check out <a href="{% url 'onesample' %}">One sample</a> where this example gets pre-loaded if you don't change any of the settings.
 
 {% endblock %}

@@ -22,9 +22,9 @@ import argparse
 import csv
 import midsin.utils
 
-parser = argparse.ArgumentParser(description="Produce output pdf and csv file of midsin")
+parser = argparse.ArgumentParser(description="Produce output pdf and csv file of midSIN")
 parser.add_argument('infile', type=str,
-	help='input csv file with one plate per line')
+	help='input csv file with one sample outcome per line')
 #parser.add_argument('-l','--label', type=str,
 #	help='graph label (default: row-#')
 args = parser.parse_args()

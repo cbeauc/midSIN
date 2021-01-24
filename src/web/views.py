@@ -33,7 +33,7 @@ def home(request):
 
 
 def csv_template(request):
-	""" Constructs the csv_template for batch processing of multiple plate
+	""" Constructs the csv_template for batch processing of multiple sample
 		outcomes.
 
 	"""
@@ -54,27 +54,27 @@ def parse_ninf_ntot( pdic ):
 
 
 
-def oneplate(request):
+def onesample(request):
 	if request.method == "GET":
 		form = sinforms.plate_layout(request.GET)
 
 		# If layout hasn't even been set yet
 		if not form.is_valid():
 			form = sinforms.plate_layout()
-			return render(request, "templates/oneplate.html",{'form':form, 'status':'set_layout'})
+			return render(request, "templates/onesample.html",{'form':form, 'status':'set_layout'})
 
-		# If plate layout is valid: add the plate outcome (sninf, sntot)
+		# If plate layout is valid: add the sample outcome (sninf, sntot)
 		if 'ntot' not in request.GET:
 			dils = form.add_outcome()
-			return render(request,"templates/oneplate.html",{'form':form, 'dils':dils, 'status':'set_outcome'})
+			return render(request,"templates/onesample.html",{'form':form, 'dils':dils, 'status':'set_outcome'})
 
-		# If the plate outcome has been submitted and is valid
+		# If the sample outcome has been submitted and is valid
 		data = parse_ninf_ntot( form.cleaned_data.copy() )
 		gridfig,csvout = midsin.utils.dict_to_output(data)
 		# Save figure file
 		figfile = io.StringIO()
 		gridfig.fig.savefig(figfile,format='svg',bbox_inches='tight')
-		return render(request,"templates/oneplate.html",{'status':'results', 'params':data, 'image':figfile.getvalue(), 'template':csvout.getvalue()})
+		return render(request,"templates/onesample.html",{'status':'results', 'params':data, 'image':figfile.getvalue(), 'template':csvout.getvalue()})
 
 
 

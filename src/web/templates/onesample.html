@@ -1,6 +1,6 @@
 {% extends 'templates/header.html' %}
 
-{% block nav-oneplate %}<a class="active" href="{% url 'oneplate' %}">One plate</a>{% endblock %}
+{% block nav-onesample %}<a class="active" href="{% url 'onesample' %}">One sample</a>{% endblock %}
 
 {% block content %}
 
@@ -41,7 +41,7 @@ Bookmark this page to save the <u>above</u> plate layout settings.<br>
 </p>
 <hr>
 <p>
-Process multiple plate outcomes by changing the data <u>below</u>.
+Process multiple sample outcomes with the same plate layout by changing the data <u>below</u>.
 </p>
 <p>
 dils = {{ dils }}<br>
@@ -56,7 +56,7 @@ dils = {{ dils }}<br>
 </table>
 <br>
 
-<input type="submit" value="Submit plate outcome">
+<input type="submit" value="Submit sample outcome">
 </form>
 
 {% elif status == "results" %}

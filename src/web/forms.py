@@ -1,15 +1,6 @@
 from django import forms
-from django.core.validators import MaxValueValidator,MinValueValidator
 from django.utils.safestring import mark_safe
 import midsin
-
-
-
-class FlexFloatField(forms.CharField):
-	def to_python(self, value):
-		if value:
-			return float(eval(repr(value)))
-		return value
 
 
 
@@ -25,7 +16,6 @@ class plate_layout(forms.Form):
 		help_text = mark_safe(midsin.info['dilmin']),
 		initial = midsin.example['dilmin'],
 		max_value = 1.0,
-		#validator = [MaxValueValidator(1.0)],
 	)
 	dilfac = forms.FloatField(
 		label = midsin.label['dilfac'],
@@ -45,7 +35,7 @@ class plate_layout(forms.Form):
 		initial = midsin.example['nreps'],
 		min_value = 1,
 	)
-	## Fields related to plate outcomes
+	## Fields related to sample outcomes
 	name = forms.CharField(
 		label = midsin.label['name'],
 		help_text = midsin.info['name'],
@@ -72,13 +62,13 @@ class plate_layout(forms.Form):
 
 	def add_outcome(self):
 		# Disable fields linked to plate layout
-		# Enable fields linked to plate outcome
+		# Enable fields linked to sample outcome
 		for field in self.fields.values():
 			if field.required == True:
 				field.widget.attrs['readonly'] = True
 			elif field.label != midsin.label['comments']:
 				field.required = True
-		# Add the plate outcome fields
+		# Add the sample outcome fields
 		layout = self.cleaned_data
 		dil = layout['dilmin']
 		dilfac = layout['dilfac']
