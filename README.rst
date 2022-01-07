@@ -48,19 +48,21 @@ If you want to use midSIN as a command-line application, type ``midsin [mytempla
 Attribution
 -----------
 
-If you make use of this code, make sure to cite it.
+If you make use of this code, make sure to cite our paper.
 
 The BibTeX entry is::
 
 	@MISC{midSIN,
 		AUTHOR = "Daniel Cresta and Donald C. Warren and Christian Quirouette and Amanda P. Smith and Lindey C. Lane and Amber M. Smith and Catherine A. A. Beauchemin",
-		TITLE = "Time to revisit the endpoint dilution assay and to replace {TCID}$_{50}$ and {PFU} as measures of a virus sample's infection concentration",
-		MONTH = "January",
+		TITLE = "Time to revisit the endpoint dilution assay and to replace the {TCID}$_{50}$ as a measure of a virus sample's infection concentration",
+    	JOURNAL = "PLOS Comput. Biol.",
+		VOLUME = "17",
+		NUMBER = "10",
+		MONTH = "October",
 		YEAR = "2021",
-		EPRINT = "2101.11526",
-		ARCHIVEPREFIX = "arXiv",
-		PRIMARYCLASS = "q-bio.QM",
-		URL = "https://midSIN.physics.ryerson.ca"
+		PAGES = "e1009480",
+		DOI = "10.1371/journal.pcbi.1009480",
+		URL = "https://midsin.physics.ryerson.ca",
 	}
 
 
