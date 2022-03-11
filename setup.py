@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2021 Catherine Beauchemin
+# Copyright (C) 2020-2022 Catherine Beauchemin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ from distutils.core import setup
 
 setup(
 	name = "midsin",
-	version = "0.1",
+	version = "0.2",
 	author = "Catherine Beauchemin et al. (See AUTHORS)",
 	author_email = "cbeau@users.sourceforge.net",
 	url = "https://github.com/cbeauc/midSIN",

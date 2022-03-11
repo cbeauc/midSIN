@@ -12,14 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-print('***MIDSIN_WEB_PATH***: ',os.environ["MIDSIN_WEB_PATH"])
-
-
-# SECURITY WARNING: keep the secret key used in production secret!
-with open(os.environ["MIDSIN_WEB_PATH"]+"/settings/secret_key.txt") as f:
-	SECRET_KEY = f.read().strip()
-
-
 # Application definition
 
 INSTALLED_APPS = [
