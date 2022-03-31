@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2021 Catherine Beauchemin
+# Copyright (C) 2020-2022 Catherine Beauchemin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ params = {
 matplotlib.rcParams.update(params)
 import matplotlib.figure
 from matplotlib.backends.backend_agg import FigureCanvas
-
+import matplotlib.ticker
 
 
 class grid_plot(object):
@@ -122,7 +122,7 @@ def observed_wells(idassay, ax):
 	# Now annotate
 	ax.set_xticks(numpy.round(-idassay.pack['dilutions'][::2],1))
 	ax.set_xticklabels(['%.1f'%s for s in ax.get_xticks()])
-	ax.set_yticks(range(0,max(idassay.pack['ntot'])+1))
+	ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True,min_n_ticks=min(6,idassay.pack['ntot'].max()),steps=[1, 2, 3, 4, 5, 10]))
 	ax.set_xlim(-DR[0][-1],-DR[0][0])
 	ax.set_ylim(-0.5,idassay.pack['ntot'].max()+0.5)
 	ax.set_xlabel(r'Sample dilution,\ $10^{-x}$')

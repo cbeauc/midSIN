@@ -19,7 +19,7 @@ from distutils.core import setup
 
 setup(
 	name = "midsin",
-	version = "0.2",
+	version = "0.3",
 	author = "Catherine Beauchemin et al. (See AUTHORS)",
 	author_email = "cbeau@users.sourceforge.net",
 	url = "https://github.com/cbeauc/midSIN",

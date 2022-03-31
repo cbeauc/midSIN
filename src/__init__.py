@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2021 Catherine Beauchemin
+# Copyright (C) 2020-2022 Catherine Beauchemin
 # Copyright (C) 2019-2020 Christian Quirouette
 # Copyright (C) 2016-2019 Daniel Cresta
 #
@@ -139,7 +139,8 @@ class Assay(object):
 			self.pack['mode'] = numpy.nan
 			return self.pack['mode']
 		# Estimate most likely lCvir value (mode of dist)
-		res = scipy.optimize.minimize_scalar(lambda x: -self.lCcalc(x))
+		bracket = -numpy.log10((self.VDs[0]*10.0, self.VDs[numpy.where(self.nmks)][0], self.VDs[-1]/10.0))
+		res = scipy.optimize.minimize_scalar(lambda x: -self.lCcalc(x), bracket=bracket)
 		assert res.success, 'Could not find lC mode'
 		self.pack['mode'] = res.x
 		return self.pack['mode']
