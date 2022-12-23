@@ -15,7 +15,7 @@ The name midSIN stands for **m**\ easure of **i**\ nfectious **d**\ ose in **SIN
 Usage
 -----
 
-The simplest way to use midSIN is via its `website application <https://midSIN.physics.ryerson.ca>`_. If you prefer to use it locally on your own computer, follow the Installation instructions.
+The simplest way to use midSIN is via its `website application <https://midsin.roadcake.org>`_. If you prefer to use it locally on your own computer, follow the Installation instructions.
 
 
 Installation
@@ -48,7 +48,7 @@ Local usage
 
 If you want to use midSIN as a website application, type ``midsin_web runserver`` in a terminal which will launch the local web server at ``http://127.0.0.1:8000/``. You can just point your browser to this URL and you're ready to go. You will keep seeing the warning about insecure key, but you can safely ignore it.
 
-If you want to use midSIN as a command-line application, type ``midsin [mytemplate.csv]`` where ``[mytemplate.csv]`` should be the path and name of your midSIN template file containing one or more sample outcomes. You can download the example template file ``midsin_batch.csv`` from `midSIN's website <https://midsin.physics.ryerson.ca/batch>`_, which also provides information on the template formatting.
+If you want to use midSIN as a command-line application, type ``midsin [mytemplate.csv]`` where ``[mytemplate.csv]`` should be the path and name of your midSIN template file containing one or more sample outcomes. You can download the example template file ``midsin_batch.csv`` from `midSIN's website <https://midsin.roadcake.org/batch>`_, which also provides information on the template formatting.
 
 
 Attribution
@@ -68,7 +68,7 @@ The BibTeX entry is::
 		YEAR = "2021",
 		PAGES = "e1009480",
 		DOI = "10.1371/journal.pcbi.1009480",
-		URL = "https://midsin.physics.ryerson.ca",
+		URL = "https://midsin.roadcake.org",
 	}
 
 
