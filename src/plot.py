@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2022 Catherine Beauchemin
+# Copyright (C) 2020-2026 Catherine Beauchemin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# =============================================================================
+# ============================================================================
 
 """
 This module contains the plotting routines that produce a visual
@@ -85,8 +85,8 @@ def lC_post(idassay, ax):
 	ax.axvline(idassay.pack['mode'], color='tab:blue')
 	xlim = ax.get_xlim()
 	cor = numpy.log10(numpy.exp(-0.5772156649)) # from Wulff
-	ax.axvline(idassay.pack['RM']+cor,color='tab:orange',linewidth=1.5,linestyle='-')
-	ax.axvline(idassay.pack['SK']+cor,color='tab:green',linewidth=1.5,linestyle='--')
+	ax.axvline(idassay.pack['RM']+cor,color='tab:orange',lw=1.5,ls='-')
+	ax.axvline(idassay.pack['SK']+cor,color='tab:green',lw=1.5,ls='--')
 	# Now annotate
 	val = tuple([idassay.pack['mode']]+[a-idassay.pack['mode'] for a in bound])
 	ax.set_title(r'${%.3f\,}_{%+.2f}^{%+.2f}\left[{}_{%+.2f}^{%+.2f}\right]$'%val)
@@ -108,17 +108,17 @@ def observed_wells(idassay, ax):
 	DR = numpy.vstack(DR)
 	# Vertical line showing TCID50 by others
 	cor = numpy.log10(idassay.pack['Vinoc']) # as fct of well dilution, not /mL
-	ax.axvline(idassay.pack['RM']+cor,color='tab:orange',linewidth=1.5,linestyle='-')
-	ax.axvline(idassay.pack['SK']+cor,color='tab:green',linewidth=1.5,linestyle='--')
+	ax.axvline(idassay.pack['RM']+cor,color='tab:orange',lw=1.5,ls='-')
+	ax.axvline(idassay.pack['SK']+cor,color='tab:green',lw=1.5,ls='--')
 	# Plot theoretical curve based on mode of the Cvir distribution
-	ax.fill_between(-DR[0],DR[4],DR[5],color=(0.75,0.75,0.75))
-	ax.fill_between(-DR[0],DR[2],DR[3],color='white')
-	ax.plot(-DR[0],DR[1],'tab:blue',linewidth=1.5)
+	ax.plot(-DR[0],DR[1],'tab:blue',lw=1.5, label='_nolegend_')
+	ax.fill_between(-DR[0],DR[4],DR[5],color=(0.75,0.75,0.75),label='_nolegend_')
+	ax.fill_between(-DR[0],DR[2],DR[3],color='white',label='_nolegend_')
 	# Plot # wells infected vs dilution
-	ax.axhline(idassay.pack['ntot'].max()*0.5,ls=':',color='grey')
+	ax.axhline(idassay.pack['ntot'].max()*0.5,ls=':',color='grey',label='_nolegend_')
 	# Need to account for spoiled wells e.g. 7 rather than 8 repeats
 	ninfcorr = (1.0*idassay.pack['ninf']/idassay.pack['ntot'])*numpy.round(idassay.pack['ntot'].mean())
-	ax.plot(-idassay.pack['dilutions'],ninfcorr,'ko')
+	ax.plot(-idassay.pack['dilutions'],ninfcorr,'ko',label='_nolegend_')
 	# Now annotate
 	ax.set_xticks(numpy.round(-idassay.pack['dilutions'][::2],1))
 	ax.set_xticklabels(['%.1f'%s for s in ax.get_xticks()])

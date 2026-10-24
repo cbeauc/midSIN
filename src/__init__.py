@@ -1,4 +1,4 @@
-# Copyright (C) 2020-2022 Catherine Beauchemin
+# Copyright (C) 2020-2026 Catherine Beauchemin
 # Copyright (C) 2019-2020 Christian Quirouette
 # Copyright (C) 2016-2019 Daniel Cresta
 #
@@ -15,13 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# =============================================================================
+# ============================================================================
 
 import numpy
 import scipy.interpolate
 import scipy.optimize
 import scipy.stats
 
+# numpy.trapz was deprecated in numpy 2.0 & removed in 2.4
+if hasattr(numpy, "trapezoid"):
+	trapezoid = numpy.trapezoid
+else:
+	trapezoid = numpy.trapz
 
 # Columns of csv input file
 incols = ['name','Vinoc','dilmin','dilfac','ntot','ninf','comments']
@@ -101,7 +106,7 @@ def RMSK(dilut,Npos,Ntot):
 	if idx == 0: # if frac<1 in lowest dilution column
 		frac = numpy.hstack((1.0,frac))
 		dilut = numpy.hstack((dilut[0]+df,dilut))
-	SK = df*numpy.trapz(frac[idx:]) - dilut[idx]
+	SK = df*trapezoid(frac[idx:]) - dilut[idx]
 	return (RM,SK)
 
 
